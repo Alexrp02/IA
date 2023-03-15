@@ -5,11 +5,45 @@
 #include <iostream>
 using namespace std;
 
+<<<<<<< HEAD
 struct state
 {
   int fil;
   int col;
   Orientacion brujula;
+=======
+struct state {
+  int fil;
+  int col; 
+  Orientacion brujula ;
+} ;
+
+class ComportamientoJugador : public Comportamiento{
+
+  public:
+    ComportamientoJugador(unsigned int size) : Comportamiento(size){
+      // Constructor de la clase
+      // Dar el valor inicial a las variables de estado
+      current_state.fil = current_state.col = 99 ;
+      current_state.brujula = norte ;
+      last_action = actIDLE ;
+      girar_derecha=false ;
+    }
+
+    ComportamientoJugador(const ComportamientoJugador & comport) : Comportamiento(comport){}
+    ~ComportamientoJugador(){}
+
+    Action think(Sensores sensores);
+    int interact(Action accion, int valor);
+
+  private:
+  state current_state ;
+  Action last_action ;
+  bool girar_derecha ;
+
+  // Declarar aquí las variables de estado
+
+>>>>>>> 7e691e5 (Added moving functionality)
 };
 
 class ComportamientoJugador : public Comportamiento
