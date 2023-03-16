@@ -2,6 +2,7 @@
 #define COMPORTAMIENTOJUGADOR_H
 
 #include "comportamientos/comportamiento.hpp"
+#include <iostream>
 using namespace std;
 
 struct state {
@@ -16,10 +17,17 @@ class ComportamientoJugador : public Comportamiento{
     ComportamientoJugador(unsigned int size) : Comportamiento(size){
       // Constructor de la clase
       // Dar el valor inicial a las variables de estado
-      current_state.fil = current_state.col = 99 ;
+
+      //Inicializamos el vector del tiempo en el que se pasó por las casillas a 0
+      vector<double> aux(size, 0) ;
+      for (size_t i = 0; i < size; i++)
+        mapaTiempo.push_back(aux) ;
+      
+      current_state.fil = current_state.col = size-1 ;
       current_state.brujula = norte ;
       last_action = actIDLE ;
       girar_derecha=false ;
+      bien_situado = false ;
     }
 
     ComportamientoJugador(const ComportamientoJugador & comport) : Comportamiento(comport){}
@@ -32,9 +40,13 @@ class ComportamientoJugador : public Comportamiento{
   state current_state ;
   Action last_action ;
   bool girar_derecha ;
+  bool bien_situado ;
+  vector <vector<double>> mapaTiempo ;
 
   // Declarar aquí las variables de estado
 
 };
+
+bool esAccesible(char terreno, char superficie) ;
 
 #endif
