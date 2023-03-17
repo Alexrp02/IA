@@ -41,6 +41,7 @@ class ComportamientoJugador : public Comportamiento{
   Action last_action ;
   bool girar_derecha ;
   bool bien_situado ;
+  bool cargaNecesaria;
   vector <vector<double>> mapaTiempo ;
 
   // Declarar aquí las variables de estado

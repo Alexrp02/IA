@@ -9,80 +9,153 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 
 bool esAccesible(char terreno, char superficie)
 {
-	return ((terreno == 'T' or terreno == 'S' or terreno == 'G') and superficie == '_') ;
+	return ((terreno == 'T' or terreno == 'S' or terreno == 'G' or terreno == 'B' or terreno == 'A' or terreno == 'K' or terreno == 'D' or terreno == 'X') and superficie == '_');
 }
 
-int calcFil (Orientacion direccion, state estado, bool izq) {
+int calcFilSig(Orientacion direccion, state estado)
+{
 	int sol;
 	switch (estado.brujula)
-		{
-		case norte:
-			izq ? sol = estado.fil-1 : sol = estado.fil-1;
-			
-			break;
-		case noreste:
-			izq ? sol = estado.fil-1 : sol = estado.fil;
-			break;
-		case este:
-			izq ? sol = estado.fil-1 : sol = estado.fil+1;
-			break;
-		case sureste: /*Actualizacion*/
-			izq ? sol = estado.fil : sol = estado.fil+1;
-			break;
-		case sur: /*Actualizacion*/
-			izq ? sol = estado.fil+1 : sol = estado.fil+1;
-			break;
-		case suroeste: /*Actualizacion*/
-			izq ? sol = estado.fil+1 : sol = estado.fil;
-			break;
-		case oeste: /*Actualizacion*/
-			izq ? sol = estado.fil+1 : sol = estado.fil-1;
-			break;
-		case noroeste: /*Actualizacion*/
-			izq ? sol = estado.fil : sol = estado.fil-1;
-			break;
-		}
-	return sol ;
+	{
+	case norte:
+		sol = estado.fil - 1;
+		break;
+	case noreste:
+		sol = estado.fil - 1;
+		break;
+	case este:
+		sol = estado.fil;
+		break;
+	case sureste: /*Actualizacion*/
+		sol = estado.fil + 1;
+		break;
+	case sur: /*Actualizacion*/
+		sol = estado.fil + 1;
+		break;
+	case suroeste: /*Actualizacion*/
+		sol = estado.fil + 1;
+		break;
+	case oeste: /*Actualizacion*/
+		sol = estado.fil;
+		break;
+	case noroeste: /*Actualizacion*/
+		sol = estado.fil - 1;
+		break;
+	}
+	return sol;
 }
 
-int calcCol (Orientacion direccion, state estado, bool izq) {
+int calcColSig(Orientacion direccion, state estado)
+{
 	int sol;
 	switch (estado.brujula)
-		{
-		case norte:
-			izq ? sol = estado.fil-1 : sol = estado.fil-1;
-			
-			break;
-		case noreste:
-			izq ? sol = estado.fil-1 : sol = estado.fil;
-			break;
-		case este:
-			izq ? sol = estado.fil-1 : sol = estado.fil+1;
-			break;
-		case sureste: /*Actualizacion*/
-			izq ? sol = estado.fil : sol = estado.fil+1;
-			break;
-		case sur: /*Actualizacion*/
-			izq ? sol = estado.fil+1 : sol = estado.fil+1;
-			break;
-		case suroeste: /*Actualizacion*/
-			izq ? sol = estado.fil+1 : sol = estado.fil;
-			break;
-		case oeste: /*Actualizacion*/
-			izq ? sol = estado.fil+1 : sol = estado.fil-1;
-			break;
-		case noroeste: /*Actualizacion*/
-			izq ? sol = estado.fil : sol = estado.fil-1;
-			break;
-		}
-	return sol ;
+	{
+	case norte:
+		sol = estado.col;
+		break;
+	case noreste:
+		sol = estado.col + 1;
+		break;
+	case este:
+		sol = estado.col + 1;
+		break;
+	case sureste: /*Actualizacion*/
+		sol = estado.col + 1;
+		break;
+	case sur: /*Actualizacion*/
+		sol = estado.col;
+		break;
+	case suroeste: /*Actualizacion*/
+		sol = estado.col - 1;
+		break;
+	case oeste: /*Actualizacion*/
+		sol = estado.col - 1;
+		break;
+	case noroeste: /*Actualizacion*/
+		sol = estado.col - 1;
+		break;
+	}
+	return sol;
+}
+
+int calcFilIzq(Orientacion direccion, state estado, bool izq)
+{
+	int sol;
+	switch (estado.brujula)
+	{
+	case norte:
+		izq ? sol = estado.fil - 1 : sol = estado.fil - 1;
+
+		break;
+	case noreste:
+		izq ? sol = estado.fil - 1 : sol = estado.fil;
+		break;
+	case este:
+		izq ? sol = estado.fil - 1 : sol = estado.fil + 1;
+		break;
+	case sureste: /*Actualizacion*/
+		izq ? sol = estado.fil : sol = estado.fil + 1;
+		break;
+	case sur: /*Actualizacion*/
+		izq ? sol = estado.fil + 1 : sol = estado.fil + 1;
+		break;
+	case suroeste: /*Actualizacion*/
+		izq ? sol = estado.fil + 1 : sol = estado.fil;
+		break;
+	case oeste: /*Actualizacion*/
+		izq ? sol = estado.fil + 1 : sol = estado.fil - 1;
+		break;
+	case noroeste: /*Actualizacion*/
+		izq ? sol = estado.fil : sol = estado.fil - 1;
+		break;
+	}
+	return sol;
+}
+
+int calcColDer(Orientacion direccion, state estado, bool izq)
+{
+	int sol;
+	switch (estado.brujula)
+	{
+	case norte:
+		izq ? sol = estado.col - 1 : sol = estado.col + 1;
+
+		break;
+	case noreste:
+		izq ? sol = estado.col : sol = estado.col + 1;
+		break;
+	case este:
+		izq ? sol = estado.col + 1 : sol = estado.col + 1;
+		break;
+	case sureste: /*Actualizacion*/
+		izq ? sol = estado.col + 1 : sol = estado.col;
+		break;
+	case sur: /*Actualizacion*/
+		izq ? sol = estado.col + 1 : sol = estado.col - 1;
+		break;
+	case suroeste: /*Actualizacion*/
+		izq ? sol = estado.col : sol = estado.col - 1;
+		break;
+	case oeste: /*Actualizacion*/
+		izq ? sol = estado.col - 1 : sol = estado.col - 1;
+		break;
+	case noroeste: /*Actualizacion*/
+		izq ? sol = estado.col - 1 : sol = estado.col;
+		break;
+	}
+	return sol;
 }
 
 Action ComportamientoJugador::think(Sensores sensores)
 {
 	Action accion = actIDLE;
 
-	mapaTiempo[current_state.fil][current_state.col] = sensores.tiempo;
+	if (sensores.bateria <= 3000)
+	{
+		cargaNecesaria = true;
+	}
+
+	mapaTiempo[current_state.fil - 1][current_state.col - 1] = sensores.tiempo;
 	int a;
 	switch (last_action)
 	{
@@ -155,6 +228,11 @@ Action ComportamientoJugador::think(Sensores sensores)
 		bien_situado = true;
 	}
 
+	cout << "Izquierda " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] << endl;
+	cout << "Siguiente " << mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] << endl;
+	cout << "Derecha " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] << endl;
+
+
 	// Guarda en el array del mapa si ha pasado por G
 	if (bien_situado)
 	{
@@ -163,97 +241,137 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// Decidir la proxima accion
+
+	// Priorizamos recargar y esperar a estar recargado
+	if (sensores.terreno[1] == 'X' and cargaNecesaria)
+	{
+		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
+	}
+	else if (sensores.terreno[3] == 'X' and cargaNecesaria)
+	{
+		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
+	}
+	else if (sensores.terreno[2] == 'X' and cargaNecesaria)
+	{
+		accion = actFORWARD;
+	}
+	else if (sensores.terreno[0] == 'X' and cargaNecesaria)
+	{
+		accion = actIDLE;
+		if (sensores.bateria == 5000)
+			cargaNecesaria = false;
+	}
+
 	// Priorizamos girar a una casilla de G, para activar los sensores.
-	if (sensores.terreno[1] == 'G')
+	else if (sensores.terreno[1] == 'G' and !bien_situado)
 	{
-		accion = actTURN_SL;
-	}else
-	if (sensores.terreno[2] == 'G')
+
+		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
+	}
+	else if (sensores.terreno[2] == 'G' and !bien_situado)
 	{
 		accion = actFORWARD;
 	}
-	else if (sensores.terreno[3] == 'G')
+	else if (sensores.terreno[3] == 'G' and !bien_situado)
 	{
-		accion = actTURN_SR;
+		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 	}
-	//Priorizamos ahora las casillas que no han sido visitadas y son accesibles
-	else if (esAccesible(sensores.terreno[1], sensores.terreno[1]) and mapaResultado[current_state.fil][current_state.col] == '?')
-	{
-		accion = actTURN_SL;
-	}else if (esAccesible(sensores.terreno[3], sensores.terreno[3]) and mapaResultado[current_state.fil][current_state.col] == '?')
-	{
-		accion = actTURN_SR;
-	}else if (esAccesible(sensores.terreno[2], sensores.terreno[2]))
+	else if (esAccesible(sensores.terreno[2], sensores.superficie[2]) and mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] == '?')
 	{
 		accion = actFORWARD;
 	}
+
+	// Priorizamos ahora las casillas que no han sido visitadas y son accesibles
+	else if (esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
+	{
+		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
+	}
+	else if (esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
+	{
+		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
+	}
+
 	// Comprobamos de las 3 casillas que tenemos en frente cual es la que hace más tiempo que recorrimos y giramos hacia ella
-	else if(esAccesible(sensores.terreno[1], sensores.superficie[1]) and esAccesible(sensores.terreno[2], sensores.superficie[2])) {
-		switch (current_state.brujula)
+
+	else if (esAccesible(sensores.terreno[1], sensores.superficie[1]) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
+	{
+		if (mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
 		{
-		case norte:
-			if (mapaTiempo[sensores.posF-1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC] and mapaTiempo[sensores.posF-1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC+1])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case noreste:
-			if (mapaTiempo[sensores.posF-1][sensores.posC] <= mapaTiempo[sensores.posF-1][sensores.posC+1] and mapaTiempo[sensores.posF-1][sensores.posC] <= mapaTiempo[sensores.posF][sensores.posC+1])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case este:
-			if (mapaTiempo[sensores.posF-1][sensores.posC+1] <= mapaTiempo[sensores.posF][sensores.posC+1] and mapaTiempo[sensores.posF-1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC+1])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case sureste: /*Actualizacion*/
-			if (mapaTiempo[sensores.posF][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC+1] and mapaTiempo[sensores.posF][sensores.posC+1] <= mapaTiempo[sensores.posF-1][sensores.posC])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case sur: /*Actualizacion*/
-			if (mapaTiempo[sensores.posF+1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC] and mapaTiempo[sensores.posF+1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC-1])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case suroeste: /*Actualizacion*/
-			if (mapaTiempo[sensores.posF+1][sensores.posC] <= mapaTiempo[sensores.posF+1][sensores.posC-1] and mapaTiempo[sensores.posF+1][sensores.posC] <= mapaTiempo[sensores.posF][sensores.posC-1])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case oeste: /*Actualizacion*/
-			if (mapaTiempo[sensores.posF+1][sensores.posC-1] <= mapaTiempo[sensores.posF][sensores.posC-1] and mapaTiempo[sensores.posF+1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC-1])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
-		case noroeste: /*Actualizacion*/
-			if (mapaTiempo[sensores.posF][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC-1] and mapaTiempo[sensores.posF][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC])
-				accion = actTURN_SL;
-			else
-				accion = actFORWARD ;
-			break;
+			accion = actTURN_SL;
 		}
+		else if (esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		{
+			accion = actTURN_SR;
+		}
+		else
+		{
+			accion = actFORWARD;
+		}
+		// switch (current_state.brujula)
+		// {
+		// case norte:
+		// 	if (mapaTiempo[sensores.posF-1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC] and mapaTiempo[sensores.posF-1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC+1])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case noreste:
+		// 	if (mapaTiempo[sensores.posF-1][sensores.posC] <= mapaTiempo[sensores.posF-1][sensores.posC+1] and mapaTiempo[sensores.posF-1][sensores.posC] <= mapaTiempo[sensores.posF][sensores.posC+1])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case este:
+		// 	if (mapaTiempo[sensores.posF-1][sensores.posC+1] <= mapaTiempo[sensores.posF][sensores.posC+1] and mapaTiempo[sensores.posF-1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC+1])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case sureste: /*Actualizacion*/
+		// 	if (mapaTiempo[sensores.posF][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC+1] and mapaTiempo[sensores.posF][sensores.posC+1] <= mapaTiempo[sensores.posF-1][sensores.posC])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case sur: /*Actualizacion*/
+		// 	if (mapaTiempo[sensores.posF+1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC] and mapaTiempo[sensores.posF+1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC-1])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case suroeste: /*Actualizacion*/
+		// 	if (mapaTiempo[sensores.posF+1][sensores.posC] <= mapaTiempo[sensores.posF+1][sensores.posC-1] and mapaTiempo[sensores.posF+1][sensores.posC] <= mapaTiempo[sensores.posF][sensores.posC-1])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case oeste: /*Actualizacion*/
+		// 	if (mapaTiempo[sensores.posF+1][sensores.posC-1] <= mapaTiempo[sensores.posF][sensores.posC-1] and mapaTiempo[sensores.posF+1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC-1])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// case noroeste: /*Actualizacion*/
+		// 	if (mapaTiempo[sensores.posF][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC-1] and mapaTiempo[sensores.posF][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC])
+		// 		accion = actTURN_SL;
+		// 	else
+		// 		accion = actFORWARD ;
+		// 	break;
+		// }
 	}
 	// Si es una casilla accesible, da un paso alante
 	else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
 		accion = actFORWARD;
 	}
-	else if (!girar_derecha)
-	{
-		accion = actTURN_SL;
-		girar_derecha = (rand() % 2 == 0);
-	}
+	// else if (!girar_derecha)
+	// {
+	// 	accion = actTURN_SL;
+	// 	girar_derecha = (rand() % 2 == 0);
+	// }
 	else
 	{
-		accion = actTURN_SR;
+		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 		girar_derecha = (rand() % 2 == 0);
 	}
 
