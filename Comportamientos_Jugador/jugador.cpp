@@ -150,7 +150,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 {
 	Action accion = actIDLE;
 
-	if (sensores.bateria <= 3000 and sensores.vida > sensores.bateria)
+	if (sensores.bateria <= 3000 /*and sensores.vida > sensores.bateria*/)
 	{
 		cargaNecesaria = true;
 	}
@@ -235,13 +235,14 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// Si las 3 casillas de en frente no han sido guardadas, las guardamos.
-	if(bien_situado){
-		if(mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
-			mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] = sensores.terreno[1] ;
-		if(mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
-			mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] = sensores.terreno[3] ;
-		if(mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] == '?')
-			mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] = sensores.terreno[2] ;
+	if (bien_situado)
+	{
+		if (mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
+			mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] = sensores.terreno[1];
+		if (mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
+			mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] = sensores.terreno[3];
+		if (mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] == '?')
+			mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] = sensores.terreno[2];
 	}
 
 	cout << "Fila: " << current_state.fil << " Columna:" << current_state.col << endl;
@@ -274,7 +275,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	else if (sensores.terreno[0] == 'X' and cargaNecesaria)
 	{
 		accion = actIDLE;
-		if (sensores.bateria == 5000 or sensores.bateria >= sensores.vida)
+		if (sensores.bateria == 5000 /*or sensores.bateria >= sensores.vida*/)
 			cargaNecesaria = false;
 	}
 
@@ -309,9 +310,9 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	// Comprobamos de las 3 casillas que tenemos en frente cual es la que hace más tiempo que recorrimos y giramos hacia ella
 
-	else if (esAccesible(sensores.terreno[1], sensores.superficie[1]) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
+	else if ((esAccesible(sensores.terreno[1], sensores.superficie[1]) or esAccesible(sensores.terreno[3], sensores.superficie[3])) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
-		if (last_action != actTURN_BR and mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		if (last_action != actTURN_BR and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
 		{
 			sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
 		}
