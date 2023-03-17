@@ -154,69 +154,75 @@ Action ComportamientoJugador::think(Sensores sensores)
 	{
 		cargaNecesaria = true;
 	}
-
-	mapaTiempo[current_state.fil - 1][current_state.col - 1] = sensores.tiempo;
-	int a;
-	switch (last_action)
+	if (sensores.reset)
 	{
-	case actFORWARD:
-		// Actualización en caso de avanzar
-		switch (current_state.brujula)
+		bien_situado = false;
+	}
+
+	int a;
+	if (bien_situado)
+	{
+		switch (last_action)
 		{
-		case norte:
-			current_state.fil--;
+		case actFORWARD:
+			// Actualización en caso de avanzar
+			switch (current_state.brujula)
+			{
+			case norte:
+				current_state.fil--;
+				break;
+			case noreste:
+				current_state.fil--;
+				current_state.col++;
+				break;
+			case este:
+				current_state.col++;
+				break;
+			case sureste: /*Actualizacion*/
+				current_state.fil++;
+				current_state.col++;
+				break;
+			case sur: /*Actualizacion*/
+				current_state.fil++;
+				break;
+			case suroeste: /*Actualizacion*/
+				current_state.fil++;
+				current_state.col--;
+				break;
+			case oeste: /*Actualizacion*/
+				current_state.col--;
+				break;
+			case noroeste: /*Actualizacion*/
+				current_state.fil--;
+				current_state.col--;
+				break;
+			}
 			break;
-		case noreste:
-			current_state.fil--;
-			current_state.col++;
+		case actTURN_SL:
+			a = current_state.brujula;
+			a = (a + 7) % 8;
+			// girar_derecha = (rand() % 2 == 0);
+			current_state.brujula = static_cast<Orientacion>(a);
 			break;
-		case este:
-			current_state.col++;
+		case actTURN_SR:
+			a = current_state.brujula;
+			a = (a + 1) % 8;
+			// girar_derecha = (rand() % 2 == 0);
+			current_state.brujula = static_cast<Orientacion>(a);
 			break;
-		case sureste: /*Actualizacion*/
-			current_state.fil++;
-			current_state.col++;
+		case actTURN_BL:
+			// Actualización de girar 135º a la izquierda
+			a = current_state.brujula;
+			a = (a + 5) % 8;
+			current_state.brujula = static_cast<Orientacion>(a);
 			break;
-		case sur: /*Actualizacion*/
-			current_state.fil++;
-			break;
-		case suroeste: /*Actualizacion*/
-			current_state.fil++;
-			current_state.col--;
-			break;
-		case oeste: /*Actualizacion*/
-			current_state.col--;
-			break;
-		case noroeste: /*Actualizacion*/
-			current_state.fil--;
-			current_state.col--;
+		case actTURN_BR:
+			// Actualización en caso de girar 135º a la derecha
+			a = current_state.brujula;
+			a = (a + 3) % 8;
+			current_state.brujula = static_cast<Orientacion>(a);
 			break;
 		}
-		break;
-	case actTURN_SL:
-		a = current_state.brujula;
-		a = (a + 7) % 8;
-		// girar_derecha = (rand() % 2 == 0);
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	case actTURN_SR:
-		a = current_state.brujula;
-		a = (a + 1) % 8;
-		// girar_derecha = (rand() % 2 == 0);
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	case actTURN_BL:
-		// Actualización de girar 135º a la izquierda
-		a = current_state.brujula;
-		a = (a + 5) % 8;
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	case actTURN_BR:
-		// Actualización en caso de girar 135º a la derecha
-		a = current_state.brujula;
-		a = (a + 3) % 8;
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
 	}
 
 	// Si se situa sobre una casilla G, comienza a guardar en el array del mapa
@@ -228,10 +234,10 @@ Action ComportamientoJugador::think(Sensores sensores)
 		bien_situado = true;
 	}
 
+	cout << "Fila: " << current_state.fil << " Columna:" << current_state.col << endl;
 	cout << "Izquierda " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] << endl;
 	cout << "Siguiente " << mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] << endl;
 	cout << "Derecha " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] << endl;
-
 
 	// Guarda en el array del mapa si ha pasado por G
 	if (bien_situado)
@@ -263,7 +269,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// Priorizamos girar a una casilla de G, para activar los sensores.
-	else if (sensores.terreno[1] == 'G' and !bien_situado)
+	else if (sensores.terreno[1] == 'G' and !bien_situado and last_action != actTURN_BR)
 	{
 
 		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
@@ -272,7 +278,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	{
 		accion = actFORWARD;
 	}
-	else if (sensores.terreno[3] == 'G' and !bien_situado)
+	else if (sensores.terreno[3] == 'G' and !bien_situado and last_action != actTURN_BL)
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 	}
@@ -282,11 +288,11 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// Priorizamos ahora las casillas que no han sido visitadas y son accesibles
-	else if (esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
+	else if (last_action != actTURN_BR and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
 	}
-	else if (esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
+	else if (last_action != actTURN_BL and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 	}
@@ -295,13 +301,13 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	else if (esAccesible(sensores.terreno[1], sensores.superficie[1]) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
-		if (mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		if (last_action != actTURN_BR and mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
 		{
-			accion = actTURN_SL;
+			sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
 		}
-		else if (esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		else if (last_action != actTURN_BL and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
 		{
-			accion = actTURN_SR;
+			sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 		}
 		else
 		{
@@ -418,6 +424,9 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << "Vida: " << sensores.vida << endl;
 	cout << "Tiempo: " << sensores.tiempo << endl;
 	cout << endl;
+
+	// Actualizamos el tiempo de la casilla
+	mapaTiempo[current_state.fil][current_state.col] = sensores.tiempo;
 
 	// Determinar el efecto de la ultima accion enviada
 	last_action = accion;
