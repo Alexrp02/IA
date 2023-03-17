@@ -150,7 +150,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 {
 	Action accion = actIDLE;
 
-	if (sensores.bateria <= 3000)
+	if (sensores.bateria <= 3000 and sensores.vida > sensores.bateria)
 	{
 		cargaNecesaria = true;
 	}
@@ -234,6 +234,16 @@ Action ComportamientoJugador::think(Sensores sensores)
 		bien_situado = true;
 	}
 
+	// Si las 3 casillas de en frente no han sido guardadas, las guardamos.
+	if(bien_situado){
+		if(mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
+			mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] = sensores.terreno[1] ;
+		if(mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
+			mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] = sensores.terreno[3] ;
+		if(mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] == '?')
+			mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] = sensores.terreno[2] ;
+	}
+
 	cout << "Fila: " << current_state.fil << " Columna:" << current_state.col << endl;
 	cout << "Izquierda " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] << endl;
 	cout << "Siguiente " << mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] << endl;
@@ -264,7 +274,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	else if (sensores.terreno[0] == 'X' and cargaNecesaria)
 	{
 		accion = actIDLE;
-		if (sensores.bateria == 5000)
+		if (sensores.bateria == 5000 or sensores.bateria >= sensores.vida)
 			cargaNecesaria = false;
 	}
 
