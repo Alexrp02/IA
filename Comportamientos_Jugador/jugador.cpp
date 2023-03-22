@@ -334,24 +334,24 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	//Priorizamos cambiar a una casilla que no sea agua, pues consume más energía si no tenemos el bikini
-	else if (!sigoAlante('A', sensores) && !tieneBikini){
+	else if (!sigoAlante('A', sensores) && !tieneBikini && esAccesible(sensores.terreno[2], sensores.superficie[2])){
 		accion = actFORWARD ;
 	}
-	else if (!giroDer('A', sensores) && !tieneBikini){
+	else if (!giroDer('A', sensores) && !tieneBikini && esAccesible(sensores.terreno[3], sensores.superficie[3])){
 		accion = actTURN_SR ;
 	}
-	else if (!giroIzq('A', sensores) && !tieneBikini){
+	else if (!giroIzq('A', sensores) && !tieneBikini && esAccesible(sensores.terreno[1], sensores.superficie[1])){
 		accion = actTURN_SL ;
 	}
 
 	//Priorizamos cambiar a una casilla que no sea bosque si no tenemos las zapatillas, pues consume más energía
-	else if (!sigoAlante('B', sensores) && !tieneBikini){
+	else if (!sigoAlante('B', sensores) && !tieneBikini && esAccesible(sensores.terreno[2], sensores.superficie[2])){
 		accion = actFORWARD ;
 	}
-	else if (!giroDer('B', sensores) && !tieneBikini){
+	else if (!giroDer('B', sensores) && !tieneBikini && esAccesible(sensores.terreno[3], sensores.superficie[3])){
 		accion = actTURN_SR ;
 	}
-	else if (!giroIzq('B', sensores) && !tieneBikini){
+	else if (!giroIzq('B', sensores) && !tieneBikini && esAccesible(sensores.terreno[1], sensores.superficie[1])){
 		accion = actTURN_SL ;
 	}
 
