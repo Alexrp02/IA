@@ -381,68 +381,12 @@ Action ComportamientoJugador::think(Sensores sensores)
 		{
 			accion = actFORWARD;
 		}
-		// switch (current_state.brujula)
-		// {
-		// case norte:
-		// 	if (mapaTiempo[sensores.posF-1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC] and mapaTiempo[sensores.posF-1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC+1])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case noreste:
-		// 	if (mapaTiempo[sensores.posF-1][sensores.posC] <= mapaTiempo[sensores.posF-1][sensores.posC+1] and mapaTiempo[sensores.posF-1][sensores.posC] <= mapaTiempo[sensores.posF][sensores.posC+1])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case este:
-		// 	if (mapaTiempo[sensores.posF-1][sensores.posC+1] <= mapaTiempo[sensores.posF][sensores.posC+1] and mapaTiempo[sensores.posF-1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC+1])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case sureste: /*Actualizacion*/
-		// 	if (mapaTiempo[sensores.posF][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC+1] and mapaTiempo[sensores.posF][sensores.posC+1] <= mapaTiempo[sensores.posF-1][sensores.posC])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case sur: /*Actualizacion*/
-		// 	if (mapaTiempo[sensores.posF+1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC] and mapaTiempo[sensores.posF+1][sensores.posC+1] <= mapaTiempo[sensores.posF+1][sensores.posC-1])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case suroeste: /*Actualizacion*/
-		// 	if (mapaTiempo[sensores.posF+1][sensores.posC] <= mapaTiempo[sensores.posF+1][sensores.posC-1] and mapaTiempo[sensores.posF+1][sensores.posC] <= mapaTiempo[sensores.posF][sensores.posC-1])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case oeste: /*Actualizacion*/
-		// 	if (mapaTiempo[sensores.posF+1][sensores.posC-1] <= mapaTiempo[sensores.posF][sensores.posC-1] and mapaTiempo[sensores.posF+1][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC-1])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// case noroeste: /*Actualizacion*/
-		// 	if (mapaTiempo[sensores.posF][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC-1] and mapaTiempo[sensores.posF][sensores.posC-1] <= mapaTiempo[sensores.posF-1][sensores.posC])
-		// 		accion = actTURN_SL;
-		// 	else
-		// 		accion = actFORWARD ;
-		// 	break;
-		// }
 	}
 	// Si es una casilla accesible, da un paso alante
 	else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
 		accion = actFORWARD;
 	}
-	// else if (!girar_derecha)
-	// {
-	// 	accion = actTURN_SL;
-	// 	girar_derecha = (rand() % 2 == 0);
-	// }
 	else
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
