@@ -284,15 +284,15 @@ Action ComportamientoJugador::think(Sensores sensores)
 	// Decidir la proxima accion
 
 	// Priorizamos recargar y esperar a estar recargado
-	if (sensores.terreno[1] == 'X' and cargaNecesaria)
+	if (giroIzq('X', sensores) and cargaNecesaria)
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
 	}
-	else if (sensores.terreno[3] == 'X' and cargaNecesaria)
+	else if (giroDer('X', sensores) and cargaNecesaria)
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 	}
-	else if (sensores.terreno[2] == 'X' and cargaNecesaria)
+	else if (sigoAlante('X', sensores) and cargaNecesaria)
 	{
 		accion = actFORWARD;
 	}
@@ -334,24 +334,24 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	//Priorizamos cambiar a una casilla que no sea agua, pues consume más energía si no tenemos el bikini
-	else if (sensores.terreno[0]=='A' && esAccesible(sensores.terreno[2], sensores.superficie[2]) && sensores.terreno[2]!='A' && !tieneBikini){
+	else if (!sigoAlante('A', sensores) && !tieneBikini){
 		accion = actFORWARD ;
 	}
-	else if (sensores.terreno[0]=='A' && esAccesible(sensores.terreno[3], sensores.superficie[3]) && sensores.terreno[3]!='A' && !tieneBikini){
+	else if (!giroDer('A', sensores) && !tieneBikini){
 		accion = actTURN_SR ;
 	}
-	else if (sensores.terreno[0]=='A' && esAccesible(sensores.terreno[1], sensores.superficie[1]) && sensores.terreno[1]!='A' && !tieneBikini){
+	else if (!giroIzq('A', sensores) && !tieneBikini){
 		accion = actTURN_SL ;
 	}
 
 	//Priorizamos cambiar a una casilla que no sea bosque si no tenemos las zapatillas, pues consume más energía
-	else if (sensores.terreno[0]=='B' && esAccesible(sensores.terreno[2], sensores.superficie[2]) && sensores.terreno[2]!='B' && !tieneBikini){
+	else if (!sigoAlante('B', sensores) && !tieneBikini){
 		accion = actFORWARD ;
 	}
-	else if (sensores.terreno[0]=='B' && esAccesible(sensores.terreno[3], sensores.superficie[3]) && sensores.terreno[3]!='B' && !tieneBikini){
+	else if (!giroDer('B', sensores) && !tieneBikini){
 		accion = actTURN_SR ;
 	}
-	else if (sensores.terreno[0]=='B' && esAccesible(sensores.terreno[1], sensores.superficie[1]) && sensores.terreno[1]!='B' && !tieneBikini){
+	else if (!giroIzq('B', sensores) && !tieneBikini){
 		accion = actTURN_SL ;
 	}
 
