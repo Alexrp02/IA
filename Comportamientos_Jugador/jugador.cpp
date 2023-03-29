@@ -78,7 +78,7 @@ int calcColSig(Orientacion direccion, state estado)
 	return sol;
 }
 
-int calcFilIzq(Orientacion direccion, state estado, bool izq)
+int calcFillIzqDer(Orientacion direccion, state estado, bool izq)
 {
 	int sol;
 	switch (estado.brujula)
@@ -112,7 +112,7 @@ int calcFilIzq(Orientacion direccion, state estado, bool izq)
 	return sol;
 }
 
-int calcColDer(Orientacion direccion, state estado, bool izq)
+int calcColIzqDer(Orientacion direccion, state estado, bool izq)
 {
 	int sol;
 	switch (estado.brujula)
@@ -251,18 +251,18 @@ Action ComportamientoJugador::think(Sensores sensores)
 	// Si las 3 casillas de en frente no han sido guardadas, las guardamos.
 	if (bien_situado)
 	{
-		if (mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
-			mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] = sensores.terreno[1];
-		if (mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
-			mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] = sensores.terreno[3];
+		if (mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] == '?')
+			mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] = sensores.terreno[1];
+		if (mapaResultado[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] == '?')
+			mapaResultado[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] = sensores.terreno[3];
 		if (mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] == '?')
 			mapaResultado[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] = sensores.terreno[2];
 	}
 
 	cout << "Fila: " << current_state.fil << " Columna:" << current_state.col << endl;
-	cout << "Izquierda " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] << endl;
+	cout << "Izquierda " << mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] << endl;
 	cout << "Siguiente " << mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)] << endl;
-	cout << "Derecha " << mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] << endl;
+	cout << "Derecha " << mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] << endl;
 
 	//Guarda si tiene el bikini
 	if(sensores.terreno[0] == 'K') {
@@ -356,11 +356,11 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// Priorizamos ahora las casillas que no han sido visitadas y son accesibles
-	else if (last_action != actTURN_BR and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] == '?')
+	else if (last_action != actTURN_BR and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] == '?')
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
 	}
-	else if (last_action != actTURN_BL and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaResultado[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] == '?')
+	else if (last_action != actTURN_BL and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaResultado[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] == '?')
 	{
 		sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 	}
@@ -369,11 +369,11 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	else if ((esAccesible(sensores.terreno[1], sensores.superficie[1]) or esAccesible(sensores.terreno[3], sensores.superficie[3])) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
-		if (last_action != actTURN_BR and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFilIzq(current_state.brujula, current_state, true)][calcColDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		if (last_action != actTURN_BR and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
 		{
 			sensores.terreno[0] == 'A' ? accion = actTURN_BL : accion = actTURN_SL;
 		}
-		else if (last_action != actTURN_BL and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFilIzq(current_state.brujula, current_state, false)][calcColDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		else if (last_action != actTURN_BL and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
 		{
 			sensores.terreno[0] == 'A' ? accion = actTURN_BR : accion = actTURN_SR;
 		}
