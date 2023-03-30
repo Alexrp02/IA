@@ -1,7 +1,7 @@
 #ifndef COMPORTAMIENTOJUGADOR_H
 #define COMPORTAMIENTOJUGADOR_H
 
-#include "comportamientos/comportamiento.hpp"
+#include "../include/comportamientos/comportamiento.hpp"
 #include <iostream>
 using namespace std;
 

@@ -11,17 +11,6 @@
 			"group": "build",
 			"problemMatcher": [],
 			"detail": "CMake template build task"
-		},
-		{
-			"type": "cmake",
-			"label": "CMake: build",
-			"command": "build",
-			"targets": [
-				"all"
-			],
-			"group": "build",
-			"problemMatcher": [],
-			"detail": "CMake template build task"
 		}
 	]
 }

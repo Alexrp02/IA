@@ -151,6 +151,7 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 	int posF0 = st.fil ;
 	int posC0 = st.col ;
 	matriz[posF0][posC0] = terreno[pos] ;
+	pos++ ;
 
 	// Bucle para primera profundidad
 	int posF = posF0 + fil0 ;
@@ -161,13 +162,13 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 			matriz[posF][posC] = terreno[pos] ;
 
 		// Actualizamos la posición, dependiendo de si empieza a sumar por columnas o no
-		if(comienzaCol && pos < 3)
+		if(comienzaCol && pos < 2)
 			posC = posC + sumac ;
-		else if(!comienzaCol && pos < 3)
+		else if(!comienzaCol && pos < 2)
 			posF = posF + sumaf ;
-		else if(comienzaCol && pos >= 3)
+		else if(comienzaCol && pos >= 2)
 			posF = posF + sumaf ;
-		else if(!comienzaCol && pos >= 3)
+		else if(!comienzaCol && pos >= 2)
 			posC = posC + sumac ;
 
 	}
@@ -179,13 +180,13 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 		if (posF>=0 && posF<matriz.size() && posC>=0 && posC<matriz[0].size())
 			matriz[posF][posC] = terreno[pos] ;
 
-		if(comienzaCol && pos < 7)
+		if(comienzaCol && pos < 6)
 			posC = posC + sumac ;
-		else if(!comienzaCol && pos < 7)
+		else if(!comienzaCol && pos < 6)
 			posF = posF + sumaf ;
-		else if(comienzaCol && pos >= 7)
+		else if(comienzaCol && pos >= 6)
 			posF = posF + sumaf ; 
-		else if(!comienzaCol && pos >= 7)
+		else if(!comienzaCol && pos >= 6)
 			posC = posC + sumac ;
 	}
 
@@ -196,31 +197,35 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 		if (posF>=0 && posF<matriz.size() && posC>=0 && posC<matriz[0].size())
 			matriz[posF][posC] = terreno[pos] ;
 
-		if(comienzaCol && pos < 13)
+		if(comienzaCol && pos < 12)
 			posC = posC + sumac ;
-		else if(!comienzaCol && pos < 13)
+		else if(!comienzaCol && pos < 12)
 			posF = posF + sumaf ;
-		else if(comienzaCol && pos >= 13)
+		else if(comienzaCol && pos >= 12)
 			posF = posF + sumaf ; 
-		else if(!comienzaCol && pos >= 13)
+		else if(!comienzaCol && pos >= 12)
 			posC = posC + sumac ;
 	}
 }
 
-void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz) {
+void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, Orientacion direccion) {
 	// Tenemos que dibujar para las 4 diagonales, noreste, sureste, suroeste y noroeste
 
 	// Noroeste
-	dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false) ;
+	if(direccion == noroeste)
+		dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false) ;
 
 	// Noreste
-	dibujarDiagonales(terreno, st, matriz, -1, 0, 1, 1, true) ;
+	if(direccion == noreste)
+		dibujarDiagonales(terreno, st, matriz, -1, 0, 1, 1, true) ;
 
 	// Sureste
-	dibujarDiagonales(terreno, st, matriz, 0, 1, -1, -1, false) ;
+	if(direccion == sureste)
+		dibujarDiagonales(terreno, st, matriz, 0, 1, 1, -1, false) ;
 
 	// Suroeste
-	dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false) ;
+	if(direccion == suroeste)
+		dibujarDiagonales(terreno, st, matriz, 1, 0, -1, -1, true) ;
 }
 
 bool giroIzq (char tipoCasilla, Sensores sensor) {
@@ -328,7 +333,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	// Si las 3 casillas de en frente no han sido guardadas, las guardamos.
 	if (bien_situado)
 	{
-		dibujarEnMatriz(sensores.terreno, current_state, mapaResultado);
+		dibujarEnMatriz(sensores.terreno, current_state, mapaResultado, current_state.brujula);
 		if (mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] == '?')
 			mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] = sensores.terreno[1];
 		if (mapaResultado[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] == '?')
