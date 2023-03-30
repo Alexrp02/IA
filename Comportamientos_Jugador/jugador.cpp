@@ -146,6 +146,83 @@ int calcColIzqDer(Orientacion direccion, state estado, bool izq)
 	return sol;
 }
 
+void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, int fil0, int col0, int sumaf, int sumac, bool comienzaCol) {
+	int pos = 0 ;
+	int posF0 = st.fil ;
+	int posC0 = st.col ;
+	matriz[posF0][posC0] = terreno[pos] ;
+
+	// Bucle para primera profundidad
+	int posF = posF0 + fil0 ;
+	int posC = posC0 + col0 ;
+	for (pos ; pos<=3 ; pos++) {
+		//Si está dentro de los límites escribimos
+		if (posF>=0 && posF<matriz.size() && posC>=0 && posC<matriz[0].size())
+			matriz[posF][posC] = terreno[pos] ;
+
+		// Actualizamos la posición, dependiendo de si empieza a sumar por columnas o no
+		if(comienzaCol && pos < 3)
+			posC = posC + sumac ;
+		else if(!comienzaCol && pos < 3)
+			posF = posF + sumaf ;
+		else if(comienzaCol && pos >= 3)
+			posF = posF + sumaf ;
+		else if(!comienzaCol && pos >= 3)
+			posC = posC + sumac ;
+
+	}
+
+	// Bucle para segunda profundidad
+	posF = posF0 + fil0*2 ;
+	posC = posC0 + col0*2 ;
+	for (pos ; pos<=8 ; pos++) {
+		if (posF>=0 && posF<matriz.size() && posC>=0 && posC<matriz[0].size())
+			matriz[posF][posC] = terreno[pos] ;
+
+		if(comienzaCol && pos < 7)
+			posC = posC + sumac ;
+		else if(!comienzaCol && pos < 7)
+			posF = posF + sumaf ;
+		else if(comienzaCol && pos >= 7)
+			posF = posF + sumaf ; 
+		else if(!comienzaCol && pos >= 7)
+			posC = posC + sumac ;
+	}
+
+	// Bucle para tercera profundidad
+	posF = posF0 + fil0*3 ;
+	posC = posC0 + col0*3 ;
+	for (pos ; pos<=15 ; pos++) {
+		if (posF>=0 && posF<matriz.size() && posC>=0 && posC<matriz[0].size())
+			matriz[posF][posC] = terreno[pos] ;
+
+		if(comienzaCol && pos < 13)
+			posC = posC + sumac ;
+		else if(!comienzaCol && pos < 13)
+			posF = posF + sumaf ;
+		else if(comienzaCol && pos >= 13)
+			posF = posF + sumaf ; 
+		else if(!comienzaCol && pos >= 13)
+			posC = posC + sumac ;
+	}
+}
+
+void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz) {
+	// Tenemos que dibujar para las 4 diagonales, noreste, sureste, suroeste y noroeste
+
+	// Noroeste
+	dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false) ;
+
+	// Noreste
+	dibujarDiagonales(terreno, st, matriz, -1, 0, 1, 1, true) ;
+
+	// Sureste
+	dibujarDiagonales(terreno, st, matriz, 0, 1, -1, -1, false) ;
+
+	// Suroeste
+	dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false) ;
+}
+
 bool giroIzq (char tipoCasilla, Sensores sensor) {
 	return (sensor.terreno[1] == tipoCasilla or (sensor.terreno[4] == tipoCasilla and esAccesible(sensor.terreno[1],sensor.superficie[1])) or (sensor.terreno[9] == tipoCasilla and esAccesible(sensor.terreno[1],sensor.superficie[1]) and esAccesible(sensor.terreno[4],sensor.superficie[4]))) ;
 }
@@ -251,6 +328,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	// Si las 3 casillas de en frente no han sido guardadas, las guardamos.
 	if (bien_situado)
 	{
+		dibujarEnMatriz(sensores.terreno, current_state, mapaResultado);
 		if (mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] == '?')
 			mapaResultado[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] = sensores.terreno[1];
 		if (mapaResultado[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] == '?')

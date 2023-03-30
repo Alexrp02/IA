@@ -60,6 +60,7 @@ public:
   int interact(Action accion, int valor);
 
 private:
+  void dibujarDiagonales(Sensores sensor, int fil0, int col0, int sumaf, int sumac) ;
   state current_state;
   Action last_action;
   bool girar_derecha;
