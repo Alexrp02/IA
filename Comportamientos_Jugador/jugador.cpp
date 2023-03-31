@@ -244,7 +244,7 @@ bool giroDer(char tipoCasilla, Sensores sensor)
 
 bool sigoAlante(char tipoCasilla, Sensores sensor)
 {
-	return (sensor.terreno[2] == tipoCasilla or (sensor.terreno[6] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2])) or (sensor.terreno[12] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) and esAccesible(sensor.terreno[6], sensor.superficie[6])));
+	return (sensor.terreno[2] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) or (sensor.terreno[6] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2])) or (sensor.terreno[12] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) and esAccesible(sensor.terreno[6], sensor.superficie[6])));
 }
 
 Action ComportamientoJugador::think(Sensores sensores)
