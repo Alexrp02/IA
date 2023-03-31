@@ -2,7 +2,6 @@
 #include <iostream>
 using namespace std;
 
-<<<<<<< HEAD
 void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz)
 {
 	matriz[st.fil][st.col] = terreno[0];
@@ -248,89 +247,9 @@ bool sigoAlante(char tipoCasilla, Sensores sensor)
 	return (sensor.terreno[2] == tipoCasilla or (sensor.terreno[6] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2])) or (sensor.terreno[12] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) and esAccesible(sensor.terreno[6], sensor.superficie[6])));
 }
 
-=======
->>>>>>> 7e691e5 (Added moving functionality)
 Action ComportamientoJugador::think(Sensores sensores)
 {
 	Action accion = actIDLE;
-	int a;
-	switch (last_action)
-	{
-	case actFORWARD:
-		// Actualización en caso de avanzar
-		switch (current_state.brujula)
-		{
-		case norte:
-			current_state.fil--;
-			break;
-		case noreste:
-			current_state.fil--;
-			current_state.col++;
-			break;
-		case este:
-			current_state.col++;
-			break;
-		case sureste: /*Actualizacion*/
-			current_state.fil++;
-			current_state.col++;
-			break;
-		case sur: /*Actualizacion*/
-			current_state.fil++;
-			break;
-		case suroeste: /*Actualizacion*/
-			current_state.fil++;
-			current_state.col--;
-			break;
-		case oeste: /*Actualizacion*/
-			current_state.col--;
-			break;
-		case noroeste: /*Actualizacion*/
-			current_state.fil--;
-			current_state.col--;
-			break;
-		}
-		break;
-	case actTURN_SL:
-		a = current_state.brujula;
-		a = (a + 7) % 8;
-		girar_derecha = (rand() % 2 == 0);
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	case actTURN_SR:
-		a = current_state.brujula;
-		a = (a + 1) % 8;
-		girar_derecha = (rand() % 2 == 0);
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	case actTURN_BL:
-		// Actualización de girar 135º a la izquierda
-		a = current_state.brujula;
-		a = (a + 5) % 8;
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	case actTURN_BR:
-		// Actualización en caso de girar 135º a la derecha
-		a = current_state.brujula;
-		a = (a + 3) % 8;
-		current_state.brujula = static_cast<Orientacion>(a);
-		break;
-	}
-
-	if ((sensores.terreno[2] =='T' || sensores.terreno[2] =='S') &&
-		sensores.superficie[2] =='_')
-	{
-		accion = actFORWARD;
-	}
-	else if (!girar_derecha)
-	{
-		accion = actTURN_SL;
-		girar_derecha = (rand() % 2 == 0);
-	}
-	else
-	{
-		accion = actTURN_SR;
-		girar_derecha = (rand() % 2 == 0);
-	}
 
 	if (sensores.bateria <= 3000 /*and sensores.vida > sensores.bateria*/)
 	{
@@ -647,12 +566,9 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << "Tiempo: " << sensores.tiempo << endl;
 	cout << endl;
 
-<<<<<<< HEAD
 	// Actualizamos el tiempo de la casilla
 	mapaTiempo[current_state.fil][current_state.col] = sensores.tiempo;
 
-=======
->>>>>>> 7e691e5 (Added moving functionality)
 	// Determinar el efecto de la ultima accion enviada
 	last_action = accion;
 	return accion;
