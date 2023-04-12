@@ -468,6 +468,12 @@ Action ComportamientoJugador::think(Sensores sensores)
 		accion = actTURN_SL;
 	}
 
+	// // Comprobamos qué hacer si no tenemos las zapatillas o el bikini
+	// else if (!tieneBikini or !tieneZapatilla) 
+	// {
+
+	// }
+
 	// Priorizamos cambiar a una casilla que no sea agua, pues consume más energía si no tenemos el bikini
 	else if (!tieneBikini)
 	{
@@ -495,7 +501,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 		if ((!sigoAlante('B', sensores) or sensores.terreno[2] != 'B') && esAccesible(sensores.terreno[2], sensores.superficie[2]))
 		{
 			accion = comprobarTiempo(sensores);
-			;
+			
 		}
 		else if (!giroDer('B', sensores) && !tieneZapatilla && esAccesible(sensores.terreno[3], sensores.superficie[3]))
 		{
@@ -504,10 +510,6 @@ Action ComportamientoJugador::think(Sensores sensores)
 		else if (!giroIzq('B', sensores) && !tieneZapatilla && esAccesible(sensores.terreno[1], sensores.superficie[1]))
 		{
 			accion = actTURN_SL;
-		}
-		else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
-		{
-			accion = actFORWARD;
 		}
 		else
 		{
