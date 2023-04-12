@@ -219,30 +219,94 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 }
 
 // Función para dibujar el terreno cuando las orientaciones no son diagonales
-void dibujarRecto(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz)
+void dibujarRecto(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, int factor, bool sumaColumna)
 {
+	int cont = 1;
+
+	int filaInicial;
+	int columnaInicial;
+	for (int i = 1; i <= 3; i++)
+	{
+		if (sumaColumna)
+		{
+			columnaInicial = filaInicial = i * factor;
+		}
+		else
+		{
+			filaInicial = i * factor;
+			columnaInicial = i * (-factor);
+		}
+		for (int j = 0; j < 1 + i * 2; j++)
+		{
+
+			if (sumaColumna)
+			{
+				if (st.fil + filaInicial >= 0 and st.fil + filaInicial < matriz.size() and st.col + columnaInicial >= 0 and st.col + columnaInicial < matriz[0].size())
+				{
+					matriz[st.fil + filaInicial][st.col + columnaInicial] = terreno[cont];
+					cont++;
+					columnaInicial -= factor;
+				}
+			}
+			else
+			{
+				if (st.fil + filaInicial >= 0 and st.fil + filaInicial < matriz.size() and st.col + columnaInicial >= 0 and st.col + columnaInicial < matriz[0].size())
+				{
+					matriz[st.fil + filaInicial][st.col + columnaInicial] = terreno[cont];
+					cont++;
+					filaInicial -= factor;
+				}
+			}
+		}
+	}
 }
 
 // Función general para guardar el mapa resultado, dependiendo de la orientación llama a una función u otra.
 void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, Orientacion direccion)
 {
-	// Tenemos que dibujar para las 4 diagonales, noreste, sureste, suroeste y noroeste
-
-	// Noroeste
-	if (direccion == noroeste)
+	switch (direccion)
+	{
+	case norte:
+		dibujarRecto(terreno, st, matriz, -1, true);
+		break;
+	case sur:
+		dibujarRecto(terreno, st, matriz, 1, true);
+		break;
+	case este:
+		dibujarRecto(terreno, st, matriz, -1, false);
+		break;
+	case oeste:
+		dibujarRecto(terreno, st, matriz, 1, false);
+		break;
+	case noroeste:
 		dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false);
-
-	// Noreste
-	if (direccion == noreste)
+		break;
+	case noreste:
 		dibujarDiagonales(terreno, st, matriz, -1, 0, 1, 1, true);
-
-	// Sureste
-	if (direccion == sureste)
+		break;
+	case sureste:
 		dibujarDiagonales(terreno, st, matriz, 0, 1, 1, -1, false);
-
-	// Suroeste
-	if (direccion == suroeste)
+		break;
+	case suroeste:
 		dibujarDiagonales(terreno, st, matriz, 1, 0, -1, -1, true);
+		break;
+	}
+
+	// // Noroeste
+	// if (direccion == noroeste)
+	// 	dibujarDiagonales(terreno, st, matriz, 0, -1, -1, 1, false);
+
+	// // Noreste
+	// if (direccion == noreste)
+	// 	dibujarDiagonales(terreno, st, matriz, -1, 0, 1, 1, true);
+
+	// // Sureste
+	// if (direccion == sureste)
+	// 	dibujarDiagonales(terreno, st, matriz, 0, 1, 1, -1, false);
+
+	// // Suroeste
+	// if (direccion == suroeste)
+	// 	dibujarDiagonales(terreno, st, matriz, 1, 0, -1, -1, true);
 }
 
 // Función que determina si debería de girar a la izquierda.
@@ -469,7 +533,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// // Comprobamos qué hacer si no tenemos las zapatillas o el bikini
-	// else if (!tieneBikini or !tieneZapatilla) 
+	// else if (!tieneBikini or !tieneZapatilla)
 	// {
 
 	// }
@@ -501,7 +565,6 @@ Action ComportamientoJugador::think(Sensores sensores)
 		if ((!sigoAlante('B', sensores) or sensores.terreno[2] != 'B') && esAccesible(sensores.terreno[2], sensores.superficie[2]))
 		{
 			accion = comprobarTiempo(sensores);
-			
 		}
 		else if (!giroDer('B', sensores) && !tieneZapatilla && esAccesible(sensores.terreno[3], sensores.superficie[3]))
 		{
