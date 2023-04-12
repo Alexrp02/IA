@@ -263,6 +263,32 @@ bool sigoAlante(char tipoCasilla, Sensores sensor)
 	return (sensor.terreno[2] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) or (sensor.terreno[6] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2])) or (sensor.terreno[12] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) and esAccesible(sensor.terreno[6], sensor.superficie[6])));
 }
 
+//Función para decidir la acción a realizar en función de hace cuanto se visitó las 3 casillas de en frente.
+Action comprobarTiempo (Sensores sensores, state current_state, Action last_action) {
+	if (last_action == actTURN_BL or last_action == actTURN_BR or last_action == actTURN_SL or last_action == actTURN_SR)
+		{
+			return actFORWARD;
+		}
+		else if ((last_action != actTURN_BL or last_action != actTURN_SL) and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		{
+			// sensores.terreno[0] == 'A' ? accion = actTURN_BL : 
+			return actTURN_SL;
+		}
+		else if ((last_action != actTURN_BR or last_action != actTURN_SR) and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+		{
+			// sensores.terreno[0] == 'A' ? accion = actTURN_BR : 
+			return actTURN_SR;
+		}
+		else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
+		{
+			return actFORWARD;
+		}
+		else
+		{
+			return actTURN_SR;
+		}
+}
+
 Action ComportamientoJugador::think(Sensores sensores)
 {
 	Action accion = actIDLE;
@@ -449,7 +475,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	{
 		if ((!sigoAlante('A', sensores) or sensores.terreno[2] != 'A') && esAccesible(sensores.terreno[2], sensores.superficie[2]))
 		{
-			accion = actFORWARD;
+			accion = comprobarTiempo(sensores, current_state, last_action);
 		}
 		else if (!giroDer('A', sensores) && !tieneBikini && esAccesible(sensores.terreno[3], sensores.superficie[3]))
 		{
@@ -470,7 +496,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	{
 		if ((!sigoAlante('B', sensores) or sensores.terreno[2] != 'B') && esAccesible(sensores.terreno[2], sensores.superficie[2]))
 		{
-			accion = actFORWARD;
+			accion = comprobarTiempo(sensores, current_state, last_action);;
 		}
 		else if (!giroDer('B', sensores) && !tieneZapatilla && esAccesible(sensores.terreno[3], sensores.superficie[3]))
 		{
@@ -504,28 +530,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	else if ((esAccesible(sensores.terreno[1], sensores.superficie[1]) or esAccesible(sensores.terreno[3], sensores.superficie[3])) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
-		if (last_action == actTURN_BL or last_action == actTURN_BR or last_action == actTURN_SL or last_action == actTURN_SR)
-		{
-			accion = actFORWARD;
-		}
-		else if ((last_action != actTURN_BL or last_action != actTURN_SL) and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
-		{
-			// sensores.terreno[0] == 'A' ? accion = actTURN_BL : 
-			accion = actTURN_SL;
-		}
-		else if ((last_action != actTURN_BR or last_action != actTURN_SR) and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
-		{
-			// sensores.terreno[0] == 'A' ? accion = actTURN_BR : 
-			accion = actTURN_SR;
-		}
-		else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
-		{
-			accion = actFORWARD;
-		}
-		else
-		{
-			accion = actTURN_SR;
-		}
+		accion = comprobarTiempo(sensores, current_state, last_action);
 	}
 	// Si es una casilla accesible, da un paso alante
 	else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
