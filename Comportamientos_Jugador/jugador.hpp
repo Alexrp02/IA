@@ -29,12 +29,6 @@ public:
     for (size_t i = 0; i < size; i++)
       mapaTiempo.push_back(aux);
 
-    //Inicializamos vector imaginario de tiempo, que se usará para moverse cuando no se está bien situado
-    vector<double> aux2(size*size, 0);
-    for (int i = 0 ; i< size*size ; i++) {
-      mapaTiempoImaginario.push_back(aux2);
-    }
-
     // Inicializamos el mapaResultado con los precipicios de los bordes
     for (unsigned int i = 0; i < size; i++)
     {
@@ -58,7 +52,6 @@ public:
     current_state.fil = current_state.col = size - 1;
     current_state.brujula = norte;
     last_action = actIDLE;
-    current_state_imaginario.fil = current_state_imaginario.col = size;
     girar_derecha = false;
     bien_situado = false;
   }
@@ -73,7 +66,6 @@ private:
   void dibujarDiagonales(Sensores sensor, int fil0, int col0, int sumaf, int sumac) ;
   Action comprobarTiempo(Sensores sensores);
   state current_state;
-  state current_state_imaginario;
   Action last_action;
   bool girar_derecha;
   bool bien_situado;
@@ -82,7 +74,6 @@ private:
   bool tieneZapatilla;
   Action siguienteAccion;
   vector<vector<double>> mapaTiempo;
-  vector<vector<double>> mapaTiempoImaginario;
 
   // Declarar aquí las variables de estado
 };

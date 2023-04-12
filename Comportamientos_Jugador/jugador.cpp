@@ -432,70 +432,6 @@ Action ComportamientoJugador::think(Sensores sensores)
 		}
 	}
 
-	if(!bien_situado){
-		switch (last_action)
-		{
-		case actFORWARD:
-			// Actualización en caso de avanzar
-			switch (current_state_imaginario.brujula)
-			{
-			case norte:
-				current_state_imaginario.fil--;
-				break;
-			case noreste:
-				current_state_imaginario.fil--;
-				current_state_imaginario.col++;
-				break;
-			case este:
-				current_state_imaginario.col++;
-				break;
-			case sureste: /*Actualizacion*/
-				current_state_imaginario.fil++;
-				current_state_imaginario.col++;
-				break;
-			case sur: /*Actualizacion*/
-				current_state_imaginario.fil++;
-				break;
-			case suroeste: /*Actualizacion*/
-				current_state_imaginario.fil++;
-				current_state_imaginario.col--;
-				break;
-			case oeste: /*Actualizacion*/
-				current_state_imaginario.col--;
-				break;
-			case noroeste: /*Actualizacion*/
-				current_state_imaginario.fil--;
-				current_state_imaginario.col--;
-				break;
-			}
-			break;
-		case actTURN_SL:
-			a = current_state_imaginario.brujula;
-			a = (a + 7) % 8;
-			// girar_derecha = (rand() % 2 == 0);
-			current_state_imaginario.brujula = static_cast<Orientacion>(a);
-			break;
-		case actTURN_SR:
-			a = current_state_imaginario.brujula;
-			a = (a + 1) % 8;
-			// girar_derecha = (rand() % 2 == 0);
-			current_state_imaginario.brujula = static_cast<Orientacion>(a);
-			break;
-		case actTURN_BL:
-			// Actualización de girar 135º a la izquierda
-			a = current_state_imaginario.brujula;
-			a = (a + 5) % 8;
-			current_state_imaginario.brujula = static_cast<Orientacion>(a);
-			break;
-		case actTURN_BR:
-			// Actualización en caso de girar 135º a la derecha
-			a = current_state_imaginario.brujula;
-			a = (a + 3) % 8;
-			current_state_imaginario.brujula = static_cast<Orientacion>(a);
-			break;
-		}
-	}
-
 	// Si se situa sobre una casilla G, comienza a guardar en el array del mapa
 	if ((sensores.posF != -1 and !bien_situado))
 	{
@@ -544,7 +480,8 @@ Action ComportamientoJugador::think(Sensores sensores)
 	// Decidir la proxima accion
 
 	// Si hay una siguiente acción definida, se ejecuta
-	if(siguienteAccion != actIDLE) {
+	if (siguienteAccion != actIDLE)
+	{
 		accion = siguienteAccion;
 		siguienteAccion = actIDLE;
 	}
@@ -608,14 +545,16 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	// }
 
-	//Comprobamos si lo que tenemos al lado es un muro, si es así la siguiente acción será girar para entrar por la puerta.
-	// A la izquierda
-	else if (!esAccesible(sensores.terreno[1], sensores.superficie[1]) and esAccesible(sensores.terreno[5], sensores.superficie[5]) and esAccesible(sensores.terreno[2], sensores.superficie[2])){
+	// Comprobamos si lo que tenemos al lado es un muro, si es así la siguiente acción será girar para entrar por la puerta.
+	//  A la izquierda
+	else if (!esAccesible(sensores.terreno[1], sensores.superficie[1]) and esAccesible(sensores.terreno[5], sensores.superficie[5]) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
+	{
 		siguienteAccion = actTURN_SL;
 		accion = actFORWARD;
 	}
 	// A la derecha
-	else if (!esAccesible(sensores.terreno[3], sensores.superficie[3]) and esAccesible(sensores.terreno[7], sensores.superficie[7]) and esAccesible(sensores.terreno[2], sensores.superficie[2])){
+	else if (!esAccesible(sensores.terreno[3], sensores.superficie[3]) and esAccesible(sensores.terreno[7], sensores.superficie[7]) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
+	{
 		siguienteAccion = actTURN_SR;
 		accion = actFORWARD;
 	}
@@ -742,11 +681,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << endl;
 
 	// Actualizamos el tiempo de la casilla
-	if(bien_situado)
-		mapaTiempo[current_state.fil][current_state.col] = sensores.tiempo;
-	// Si no está bien situado se guardará en el imaginario
-	if(!bien_situado)
-		mapaTiempoImaginario[current_state_imaginario.fil][current_state_imaginario.col] = sensores.tiempo;
+	mapaTiempo[current_state.fil][current_state.col] = sensores.tiempo;
 
 	// Determinar el efecto de la ultima accion enviada
 	last_action = accion;
