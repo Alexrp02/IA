@@ -61,6 +61,7 @@ public:
 
 private:
   void dibujarDiagonales(Sensores sensor, int fil0, int col0, int sumaf, int sumac) ;
+  Action comprobarTiempo(Sensores sensores);
   state current_state;
   Action last_action;
   bool girar_derecha;

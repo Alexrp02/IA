@@ -8,13 +8,13 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 	matriz[st.fil][st.col] = terreno[0];
 }
 
-//Función para calcular si la casilla dada es accesible
+// Función para calcular si la casilla dada es accesible
 bool esAccesible(char terreno, char superficie)
 {
 	return ((terreno == 'T' or terreno == 'S' or terreno == 'G' or terreno == 'B' or terreno == 'A' or terreno == 'K' or terreno == 'D' or terreno == 'X') and superficie == '_');
 }
 
-//Función para calcular la fila de la casilla siguiente
+// Función para calcular la fila de la casilla siguiente
 int calcFilSig(Orientacion direccion, state estado)
 {
 	int sol;
@@ -48,7 +48,7 @@ int calcFilSig(Orientacion direccion, state estado)
 	return sol;
 }
 
-//Función para calcular la columna de la casilla siguiente
+// Función para calcular la columna de la casilla siguiente
 int calcColSig(Orientacion direccion, state estado)
 {
 	int sol;
@@ -117,7 +117,7 @@ int calcFillIzqDer(Orientacion direccion, state estado, bool izq)
 	return sol;
 }
 
-//Función para calcular la columna de la casilla a la izquierda o derecha
+// Función para calcular la columna de la casilla a la izquierda o derecha
 int calcColIzqDer(Orientacion direccion, state estado, bool izq)
 {
 	int sol;
@@ -152,7 +152,7 @@ int calcColIzqDer(Orientacion direccion, state estado, bool izq)
 	return sol;
 }
 
-//Función para dibujar el terreno cuando la orientación es en diagonal
+// Función para dibujar el terreno cuando la orientación es en diagonal
 void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, int fil0, int col0, int sumaf, int sumac, bool comienzaCol)
 {
 	int pos = 0;
@@ -218,12 +218,12 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 	}
 }
 
-//Función para dibujar el terreno cuando las orientaciones no son diagonales
-void dibujarRecto (const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz){
-
+// Función para dibujar el terreno cuando las orientaciones no son diagonales
+void dibujarRecto(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz)
+{
 }
 
-//Función general para guardar el mapa resultado, dependiendo de la orientación llama a una función u otra.
+// Función general para guardar el mapa resultado, dependiendo de la orientación llama a una función u otra.
 void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, Orientacion direccion)
 {
 	// Tenemos que dibujar para las 4 diagonales, noreste, sureste, suroeste y noroeste
@@ -245,13 +245,13 @@ void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vect
 		dibujarDiagonales(terreno, st, matriz, 1, 0, -1, -1, true);
 }
 
-//Función que determina si debería de girar a la izquierda.
+// Función que determina si debería de girar a la izquierda.
 bool giroIzq(char tipoCasilla, Sensores sensor)
 {
 	return (sensor.terreno[1] == tipoCasilla or (sensor.terreno[4] == tipoCasilla and esAccesible(sensor.terreno[1], sensor.superficie[1])) or (sensor.terreno[9] == tipoCasilla and esAccesible(sensor.terreno[1], sensor.superficie[1]) and esAccesible(sensor.terreno[4], sensor.superficie[4])));
 }
 
-//Función que determina si debería de girar a la derecha.
+// Función que determina si debería de girar a la derecha.
 bool giroDer(char tipoCasilla, Sensores sensor)
 {
 	return (sensor.terreno[3] == tipoCasilla or (sensor.terreno[8] == tipoCasilla and esAccesible(sensor.terreno[3], sensor.superficie[3])) or (sensor.terreno[15] == tipoCasilla and esAccesible(sensor.terreno[3], sensor.superficie[3]) and esAccesible(sensor.terreno[8], sensor.superficie[8])));
@@ -263,30 +263,28 @@ bool sigoAlante(char tipoCasilla, Sensores sensor)
 	return (sensor.terreno[2] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) or (sensor.terreno[6] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2])) or (sensor.terreno[12] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) and esAccesible(sensor.terreno[6], sensor.superficie[6])));
 }
 
-//Función para decidir la acción a realizar en función de hace cuanto se visitó las 3 casillas de en frente.
-Action comprobarTiempo (Sensores sensores, state current_state, Action last_action) {
+// Función para decidir la acción a realizar en función de hace cuanto se visitó las 3 casillas de en frente.
+Action ComportamientoJugador::comprobarTiempo(Sensores sensores)
+{
 	if (last_action == actTURN_BL or last_action == actTURN_BR or last_action == actTURN_SL or last_action == actTURN_SR)
-		{
-			return actFORWARD;
-		}
-		else if ((last_action != actTURN_BL or last_action != actTURN_SL) and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
-		{
-			// sensores.terreno[0] == 'A' ? accion = actTURN_BL : 
-			return actTURN_SL;
-		}
-		else if ((last_action != actTURN_BR or last_action != actTURN_SR) and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
-		{
-			// sensores.terreno[0] == 'A' ? accion = actTURN_BR : 
-			return actTURN_SR;
-		}
-		else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
-		{
-			return actFORWARD;
-		}
-		else
-		{
-			return actTURN_SR;
-		}
+	{
+		return actFORWARD;
+	}
+	else if ((last_action != actTURN_BL or last_action != actTURN_SL) and esAccesible(sensores.terreno[1], sensores.superficie[1]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, true)][calcColIzqDer(current_state.brujula, current_state, true)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+	{
+		// sensores.terreno[0] == 'A' ? accion = actTURN_BL :
+		return actTURN_SL;
+	}
+	else if ((last_action != actTURN_BR or last_action != actTURN_SR) and esAccesible(sensores.terreno[3], sensores.superficie[3]) and mapaTiempo[calcFillIzqDer(current_state.brujula, current_state, false)][calcColIzqDer(current_state.brujula, current_state, false)] < mapaTiempo[calcFilSig(current_state.brujula, current_state)][calcColSig(current_state.brujula, current_state)])
+	{
+		// sensores.terreno[0] == 'A' ? accion = actTURN_BR :
+		return actTURN_SR;
+	}
+	else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
+	{
+		return actFORWARD;
+	}
+	return actTURN_SR;
 }
 
 Action ComportamientoJugador::think(Sensores sensores)
@@ -475,7 +473,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	{
 		if ((!sigoAlante('A', sensores) or sensores.terreno[2] != 'A') && esAccesible(sensores.terreno[2], sensores.superficie[2]))
 		{
-			accion = comprobarTiempo(sensores, current_state, last_action);
+			accion = comprobarTiempo(sensores);
 		}
 		else if (!giroDer('A', sensores) && !tieneBikini && esAccesible(sensores.terreno[3], sensores.superficie[3]))
 		{
@@ -496,7 +494,8 @@ Action ComportamientoJugador::think(Sensores sensores)
 	{
 		if ((!sigoAlante('B', sensores) or sensores.terreno[2] != 'B') && esAccesible(sensores.terreno[2], sensores.superficie[2]))
 		{
-			accion = comprobarTiempo(sensores, current_state, last_action);;
+			accion = comprobarTiempo(sensores);
+			;
 		}
 		else if (!giroDer('B', sensores) && !tieneZapatilla && esAccesible(sensores.terreno[3], sensores.superficie[3]))
 		{
@@ -530,7 +529,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	else if ((esAccesible(sensores.terreno[1], sensores.superficie[1]) or esAccesible(sensores.terreno[3], sensores.superficie[3])) and esAccesible(sensores.terreno[2], sensores.superficie[2]))
 	{
-		accion = comprobarTiempo(sensores, current_state, last_action);
+		accion = comprobarTiempo(sensores);
 	}
 	// Si es una casilla accesible, da un paso alante
 	else if (esAccesible(sensores.terreno[2], sensores.superficie[2]))
