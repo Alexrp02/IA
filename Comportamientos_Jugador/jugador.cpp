@@ -2,16 +2,19 @@
 #include <iostream>
 using namespace std;
 
+// Función que guarda la casilla actual en el mapa resultado.
 void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz)
 {
 	matriz[st.fil][st.col] = terreno[0];
 }
 
+//Función para calcular si la casilla dada es accesible
 bool esAccesible(char terreno, char superficie)
 {
 	return ((terreno == 'T' or terreno == 'S' or terreno == 'G' or terreno == 'B' or terreno == 'A' or terreno == 'K' or terreno == 'D' or terreno == 'X') and superficie == '_');
 }
 
+//Función para calcular la fila de la casilla siguiente
 int calcFilSig(Orientacion direccion, state estado)
 {
 	int sol;
@@ -45,6 +48,7 @@ int calcFilSig(Orientacion direccion, state estado)
 	return sol;
 }
 
+//Función para calcular la columna de la casilla siguiente
 int calcColSig(Orientacion direccion, state estado)
 {
 	int sol;
@@ -78,6 +82,7 @@ int calcColSig(Orientacion direccion, state estado)
 	return sol;
 }
 
+// Función para calcular la fila de la casilla a la izquierda o derecha
 int calcFillIzqDer(Orientacion direccion, state estado, bool izq)
 {
 	int sol;
@@ -112,6 +117,7 @@ int calcFillIzqDer(Orientacion direccion, state estado, bool izq)
 	return sol;
 }
 
+//Función para calcular la columna de la casilla a la izquierda o derecha
 int calcColIzqDer(Orientacion direccion, state estado, bool izq)
 {
 	int sol;
@@ -146,6 +152,7 @@ int calcColIzqDer(Orientacion direccion, state estado, bool izq)
 	return sol;
 }
 
+//Función para dibujar el terreno cuando la orientación es en diagonal
 void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, int fil0, int col0, int sumaf, int sumac, bool comienzaCol)
 {
 	int pos = 0;
@@ -211,6 +218,12 @@ void dibujarDiagonales(const vector<unsigned char> &terreno, const state &st, ve
 	}
 }
 
+//Función para dibujar el terreno cuando las orientaciones no son diagonales
+void dibujarRecto (const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz){
+
+}
+
+//Función general para guardar el mapa resultado, dependiendo de la orientación llama a una función u otra.
 void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz, Orientacion direccion)
 {
 	// Tenemos que dibujar para las 4 diagonales, noreste, sureste, suroeste y noroeste
@@ -232,16 +245,19 @@ void dibujarEnMatriz(const vector<unsigned char> &terreno, const state &st, vect
 		dibujarDiagonales(terreno, st, matriz, 1, 0, -1, -1, true);
 }
 
+//Función que determina si debería de girar a la izquierda.
 bool giroIzq(char tipoCasilla, Sensores sensor)
 {
 	return (sensor.terreno[1] == tipoCasilla or (sensor.terreno[4] == tipoCasilla and esAccesible(sensor.terreno[1], sensor.superficie[1])) or (sensor.terreno[9] == tipoCasilla and esAccesible(sensor.terreno[1], sensor.superficie[1]) and esAccesible(sensor.terreno[4], sensor.superficie[4])));
 }
 
+//Función que determina si debería de girar a la derecha.
 bool giroDer(char tipoCasilla, Sensores sensor)
 {
 	return (sensor.terreno[3] == tipoCasilla or (sensor.terreno[8] == tipoCasilla and esAccesible(sensor.terreno[3], sensor.superficie[3])) or (sensor.terreno[15] == tipoCasilla and esAccesible(sensor.terreno[3], sensor.superficie[3]) and esAccesible(sensor.terreno[8], sensor.superficie[8])));
 }
 
+// Función que determina si debería de seguir recto.
 bool sigoAlante(char tipoCasilla, Sensores sensor)
 {
 	return (sensor.terreno[2] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) or (sensor.terreno[6] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2])) or (sensor.terreno[12] == tipoCasilla and esAccesible(sensor.terreno[2], sensor.superficie[2]) and esAccesible(sensor.terreno[6], sensor.superficie[6])));
